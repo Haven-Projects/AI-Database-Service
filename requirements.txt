@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+langchain
+langchain-google-genai
+langchain-experimental
+huggingface-hub
+sentence-transformers
+chromadb
+pymysql
+python-dotenv
