@@ -24,8 +24,8 @@ from langchain_experimental.sql import SQLDatabaseChain
 from langchain.chains.sql_database.prompt import PROMPT_SUFFIX, _mysql_prompt
 
 # Embeddings and Vector stores
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import Chroma
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -198,25 +198,35 @@ def get_few_shot_db_chain():
 def safe_chain_call(chain, question):
     """
     Runs the chain and intercepts non-SELECT or refusal SQL before execution.
-    Returns the refusal message directly if detected.
+    Returns the answer as a string consistently.
     """
     try:
         result = chain.invoke({"query": question})
+        
+        # Extract SQL query if available
         sql_query = ""
         if "intermediate_steps" in result and result["intermediate_steps"]:
             sql_query = result["intermediate_steps"][0].get("sql_cmd", "")
-        # If the SQL is not a SELECT or is a refusal message, return the message
-        if not sql_query.strip().lower().startswith("select"):
-            return sql_query # or "Sorry, can't help with that."
-        # If the result contains a refusal message, return only the answer part
+        
+        # Get the answer from result first
         answer = result.get("result", "")
-        if answer.strip().lower().startswith("sorry, can't help"):
+        
+        # If we have a SQL query but it's not SELECT, return refusal
+        if sql_query and not sql_query.strip().lower().startswith("select"):
+            return "Sorry, can't help with that."
+        
+        # If the answer contains a refusal message, return it
+        if answer and answer.strip().lower().startswith("sorry, can't help"):
             return answer
-        return answer or result
+        
+        # Return the answer or fallback message
+        return answer if answer else "Sorry, can't help with that."
+        
     except Exception as e:
+        print(f"Error in safe_chain_call: {e}")  # Add debugging
         return "Sorry, can't help with that."
 
 if __name__ == "__main__":
     chain = get_few_shot_db_chain()
-    question = "How many sales have occured in last 2 weeks?" 
+    question = "Update email address of user with id user-hs9me0cm015d4sm to aum@cool.com." 
     print(safe_chain_call(chain, question))
