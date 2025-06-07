@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain_helper import get_few_shot_db_chain, safe_chain_call
 import uvicorn
@@ -11,7 +12,13 @@ limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(title="AI Database Query Service", version="1.0.0")
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 # Initialize the chain once at startup
 chain = None
 
