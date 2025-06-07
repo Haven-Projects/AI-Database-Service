@@ -17,6 +17,9 @@ AI-Database-Service is a tool that translates natural language questions into SQ
 3. **Database Layer:** Executes the generated SQL query on the configured database.
 4. **Response Layer:** Returns the query results to the user.
 
+![image](https://github.com/user-attachments/assets/fb4dfdd0-a892-416a-96be-90ccae2f1e8d)
+
+
 ```
    User Input (Natural Language)
     |
