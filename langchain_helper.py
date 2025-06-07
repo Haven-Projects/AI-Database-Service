@@ -181,7 +181,10 @@ def get_few_shot_db_chain():
     Only use the following tables:
     {table_info}
 
-    REMEMBER: Return ONLY plain SQL without any formatting, backticks, or code blocks.
+    REMEMBER: 
+    First, generate ONLY plain SQL without any formatting, backticks, or code blocks.
+    After executing the SQL, provide a human-readable answer based on the results.
+    Do NOT return the SQL query as your final answer.
     If the question is not answerable with the given tables, return "Sorry, can't help with that.".
     If the question asks for an update or modification or deletion or drop of a tableto the database, return "Sorry, can't help with that." as well.
     If question ask anything other than SELECT query, return "Sorry, can't help with that.".
@@ -228,5 +231,5 @@ def safe_chain_call(chain, question):
 
 if __name__ == "__main__":
     chain = get_few_shot_db_chain()
-    question = "Update email address of user with id user-hs9me0cm015d4sm to aum@cool.com." 
+    question = "List all the users who have name Om" 
     print(safe_chain_call(chain, question))
