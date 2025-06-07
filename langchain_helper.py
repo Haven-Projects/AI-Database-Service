@@ -88,11 +88,11 @@ def get_few_shot_db_chain():
     Pay attention to use CURDATE() function to get the current date, if the question involves "today".
 
     CRITICAL INSTRUCTIONS:
-    - Do NOT execute INSERT, UPDATE, DELETE, or any other non-SELECT queries.
-    - Do NOT use markdown formatting
-    - Do NOT use backticks (```)
-    - Do NOT use code blocks
     - Return ONLY plain SQL
+    - Do NOT execute INSERT, UPDATE, DELETE, or any other non-SELECT queries.
+    - Do NOT use Markdown formatting
+    - Do NOT use Backticks (```)
+    - Do NOT use Code Blocks
     - Never wrap SQL in ```sql``` tags
     """
 
